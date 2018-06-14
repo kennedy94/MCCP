@@ -9,6 +9,7 @@ class Clustering{
 protected:
 	ofstream resultados;
 	IloNum soltime;
+	double alpha;
 	int m, n, p, k, **c, **q;
 	double **d;
 	IloArray<IloBoolVarArray> x;
@@ -20,14 +21,17 @@ protected:
 	double maior_peso;
 
 	void alocar_matrizes();
+	void desalocar_matrizes();
 	void cplexvar_initiate();
 	void fo();
 	void restricoes();
 
 	bool maior_que_alpha(int i, int j);
-
-
 public:
+	void set_alpha(double alpha) {
+		this->alpha = alpha;
+	}
+
 
 	Clustering(const char* filename);
 	void resolver_inteira();

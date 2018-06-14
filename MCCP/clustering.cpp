@@ -11,6 +11,21 @@ void Clustering::alocar_matrizes() {
 	for (int i = 0; i < m; i++)
 		d[i] = new double[n];
 }
+void Clustering::desalocar_matrizes() {
+	for (int i = 0; i < n; ++i) {
+		delete[] c[i];
+	}
+	delete[] c;
+	for (int i = 0; i < m; ++i) {
+		delete[] q[i];
+	}
+	delete[] q;
+	for (int i = 0; i < m; ++i) {
+		delete[] d[i];
+	}
+	delete[] d;
+}
+
 void Clustering::cplexvar_initiate() {
 	y = IloBoolVarArray(env, n);
 
@@ -80,7 +95,6 @@ void Clustering::restricoes() {
 }
 
 bool Clustering::maior_que_alpha(int i, int j) {
-	double alpha = 0.3;
 	if (d[i][j] > maior_peso*alpha)
 		return true;
 	else
@@ -122,12 +136,8 @@ void Clustering::resolver_inteira() {
 		cplexvar_initiate();
 		fo();
 		restricoes();
-		//desalocar_matrizes();
 
-		/*for (int i = 0; i < m; i++)
-			for (int j = 0; j < n; j++)
-				if (maior_que_alpha(i,j))
-					x[i][j].removeFromAll();*/
+		//desalocar_matrizes();
 
 		cplex = IloCplex(model);
 
