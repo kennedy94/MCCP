@@ -106,7 +106,6 @@ Clustering::Clustering(const char* filename) {
 	ifstream instancia(inst_name, ifstream::in);
 	if (instancia.fail()) {
 		cerr << "	Instancia nao encontrada" << endl;
-		system("pause");
 		exit(1);
 	}
 	instancia >> m >> n >> p >> k;
@@ -144,17 +143,16 @@ void Clustering::resolver_inteira() {
 		cplex.setParam(IloCplex::TiLim, 3600);
 
 		soltime = cplex.getCplexTime();
-
 		if (!cplex.solve()) {
 			env.error() << "Otimizacao do LP mal-sucedida." << endl;
-			throw(-1);
+			return;
 		}
-
 		soltime = cplex.getCplexTime() - soltime;
 
-		resultados.open("resultados.txt", fstream::app);
-		resultados << endl << inst_name << "\t" << cplex.getBestObjValue() << "\t" << cplex.getNnodes() << "\t" << cplex.getMIPRelativeGap() <<
-			"\t" << soltime << "\t";
+		resultados.open("resultados_MCCP.txt", fstream::app);
+		resultados << "\t" << cplex.getBestObjValue() << "\t" << cplex.getNnodes() << "\t" << cplex.getMIPRelativeGap() <<
+			"\t" << soltime;
+		resultados.close();
 
 	}
 	catch (IloException& e) {
@@ -166,6 +164,7 @@ void Clustering::resolver_inteira() {
 		cerr << "Outra excecao" << endl;
 	}
 }
+
 
 void Clustering::resolver_linear() {
 	//linear
@@ -183,16 +182,17 @@ void Clustering::resolver_linear() {
 	for (int j = 0; j < n; j++)
 		relax.add(IloConversion(env, y[j], ILOFLOAT));
 	cplex = IloCplex(relax);
-	soltime = cplex.getCplexTime();
 
+	soltime = cplex.getCplexTime();
 	if (!cplex.solve()) {
 		env.error() << "Otimizacao do LP mal-sucedida." << endl;
-		throw(-1);
+		return;
 	}
-
-
 	soltime = cplex.getCplexTime() - soltime;
-	resultados << cplex.getObjValue() << "	" <<
-		"	" << soltime << endl;
+
+
+	resultados.open("resultados_MCCP.txt", fstream::app);
+	resultados << "\t Linear \t" << cplex.getObjValue() << "\t" <<
+		"\t" << soltime;
 	resultados.close();
 }
