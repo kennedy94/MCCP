@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?><project>
+	<version>1.0</version>
+	<configs>
+		<config category="opl" default="true" name="Configuration1">
+			<ref name="Clusters.ops" type="setting">
+			</ref>
+			<ref name="Clusters.dat" type="data">
+			</ref>
+			<ref name="ClustersRelax.mod" type="model">
+			</ref>
+		</config>
+	</configs>
+	
+</project>
