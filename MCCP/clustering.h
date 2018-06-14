@@ -21,7 +21,7 @@ protected:
 	double maior_peso;
 
 	void alocar_matrizes();
-	void desalocar_matrizes();
+	//void desalocar_matrizes();
 	void cplexvar_initiate();
 	void fo();
 	void restricoes();

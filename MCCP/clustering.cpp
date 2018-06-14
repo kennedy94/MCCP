@@ -11,20 +11,20 @@ void Clustering::alocar_matrizes() {
 	for (int i = 0; i < m; i++)
 		d[i] = new double[n];
 }
-void Clustering::desalocar_matrizes() {
-	for (int i = 0; i < n; ++i) {
-		delete[] c[i];
-	}
-	delete[] c;
-	for (int i = 0; i < m; ++i) {
-		delete[] q[i];
-	}
-	delete[] q;
-	for (int i = 0; i < m; ++i) {
-		delete[] d[i];
-	}
-	delete[] d;
-}
+//void Clustering::desalocar_matrizes() {
+//	for (int i = 0; i < n; ++i) {
+//		delete[] c[i];
+//	}
+//	delete[] c;
+//	for (int i = 0; i < m; ++i) {
+//		delete[] q[i];
+//	}
+//	delete[] q;
+//	for (int i = 0; i < m; ++i) {
+//		delete[] d[i];
+//	}
+//	delete[] d;
+//}
 
 void Clustering::cplexvar_initiate() {
 	y = IloBoolVarArray(env, n);
@@ -73,8 +73,7 @@ void Clustering::restricoes() {
 	for (i = 0; i < m; i++) {
 		for (j = 0; j < n; j++)
 			if (!maior_que_alpha(i, j))
-				if (!maior_que_alpha(i, j))
-					expr += x[i][j];
+				expr += x[i][j];
 		model.add(expr == 1);
 		expr.clear();
 	}
@@ -92,6 +91,7 @@ void Clustering::restricoes() {
 		for (j = 0; j < n; j++)
 			if (!maior_que_alpha(i, j))
 				model.add(x[i][j] - y[j] <= 0);
+
 }
 
 bool Clustering::maior_que_alpha(int i, int j) {
@@ -141,6 +141,7 @@ void Clustering::resolver_inteira() {
 		cplex = IloCplex(model);
 
 		cplex.setParam(IloCplex::TiLim, 3600);
+		cplex.setParam(IloCplex::Param::Emphasis::Numerical, 1);
 
 		soltime = cplex.getCplexTime();
 		if (!cplex.solve()) {
@@ -150,7 +151,7 @@ void Clustering::resolver_inteira() {
 		soltime = cplex.getCplexTime() - soltime;
 
 		resultados.open("resultados_MCCP.txt", fstream::app);
-		resultados << "\t" << cplex.getBestObjValue() << "\t" << cplex.getNnodes() << "\t" << cplex.getMIPRelativeGap() <<
+		resultados << "\t" << cplex.getObjValue() << "\t" << cplex.getNnodes() << "\t" << cplex.getMIPRelativeGap() <<
 			"\t" << soltime;
 		resultados.close();
 
@@ -183,6 +184,8 @@ void Clustering::resolver_linear() {
 		relax.add(IloConversion(env, y[j], ILOFLOAT));
 	cplex = IloCplex(relax);
 
+	cplex.setParam(IloCplex::TiLim, 3600);
+	cplex.setParam(IloCplex::Param::Emphasis::Numerical, 1);
 	soltime = cplex.getCplexTime();
 	if (!cplex.solve()) {
 		env.error() << "Otimizacao do LP mal-sucedida." << endl;
