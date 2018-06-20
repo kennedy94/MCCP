@@ -34,6 +34,7 @@ public:
 
 
 	Clustering(const char* filename);
+	void montar_modelo();
 	void resolver_inteira();
 
 	void resolver_linear();

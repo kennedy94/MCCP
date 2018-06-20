@@ -128,14 +128,18 @@ Clustering::Clustering(const char* filename) {
 	instancia.close();
 }
 
+void Clustering::montar_modelo() {
+	model = IloModel(env);
+	cplexvar_initiate();
+	fo();
+	restricoes();
+
+}
+
+
 void Clustering::resolver_inteira() {
-
+	//cplex.setParam(IloCplex::TiLim, 3600);
 	try {
-		model = IloModel(env);
-		cplexvar_initiate();
-		fo();
-		restricoes();
-
 		//desalocar_matrizes();
 
 		cplex = IloCplex(model);

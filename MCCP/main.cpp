@@ -17,13 +17,27 @@ int main(int argc, char *argv[])
 	{
 		Clustering problema(argv[1]);
 		problema.set_alpha(alpha);
-		problema.resolver_inteira();
+		problema.montar_modelo();
 		problema.resolver_linear();
 	}
-	catch (const std::exception& e)
+	catch (const std::exception&)
 	{
-		cerr << e.what() << endl;
+		cerr << "Erro Linear" << endl;
 	}
+
+	try
+	{
+		Clustering problema(argv[1]);
+		problema.set_alpha(alpha);
+		problema.montar_modelo();
+		problema.resolver_inteira();
+	}
+	catch (const std::exception&)
+	{
+		cerr << "Erro Inteira" << endl;
+	}
+
+	
 
     return 0;
 }
