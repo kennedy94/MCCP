@@ -144,8 +144,9 @@ void Clustering::resolver_inteira() {
 
 		cplex = IloCplex(model);
 
-		cplex.setParam(IloCplex::TiLim, 3600);
-		cplex.setParam(IloCplex::Param::Emphasis::Numerical, 1);
+		cplex.setParam(IloCplex::TiLim, 600);
+		//cplex.setParam(IloCplex::Param::Emphasis::Numerical, 1);
+		cplex.setParam(IloCplex::NodeFileInd, 1);
 
 		soltime = cplex.getCplexTime();
 		if (!cplex.solve()) {
