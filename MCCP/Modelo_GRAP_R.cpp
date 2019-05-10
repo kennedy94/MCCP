@@ -194,17 +194,22 @@ void Modelo_GRAP_R::resolver_inteira() {
 		soltime = cplex.getCplexTime();
 		if (!cplex.solve()) {
 			env.error() << "Otimizacao do LP mal-sucedida." << endl;
+			resultados.open("resultados_MCCP.txt", fstream::app);
+			resultados << "\t" << cplex.getStatus();
+			resultados.close();
 			return;
 		}
 		soltime = cplex.getCplexTime() - soltime;
 
 		resultados.open("resultados_MCCP.txt", fstream::app);
 		resultados << "\t" << cplex.getObjValue() << "\t" << cplex.getNnodes() << "\t" << cplex.getMIPRelativeGap() <<
-			"\t" << soltime;
+			"\t" << soltime << "\t" << cplex.getStatus();
 		resultados.close();
 
 	}
 	catch (IloException& e) {
+	
+
 		cerr << "Erro: " << e.getMessage() << endl;
 		cout << "\nErro na inteira" << endl;
 		return;
