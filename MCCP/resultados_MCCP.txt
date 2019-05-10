@@ -25,3 +25,24 @@ MCCP14.datmod	 alpha1
 MCCP14.datmod	 alpha1	
 MCCP14.datmod	 alpha1	
 MCCP14.datmod	 alpha1	
+MCCP1.datmod	 alpha0.1		1466	1152	0	19.111
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP3.datmod	 alpha0.1	
+MCCP1.datmod	 alpha0.1		1466	1173	0	31.403	1477	1125	0	23.727
+MCCP1.datmod	 alpha0.05		1462	936	0	25.818	1480	892	0	14.649
+MCCP3.datmod	 alpha0.05	
+MCCP1.datmod	 alpha0.05	
+MCCP1.datmod	 alpha0.05	
+MCCP1.datmod	 alpha0.05	
+MCCP1.datmod	 alpha0.05		1492	2010	0	35.256	1482	1116	0	16.068
+MCCP2.datmod	 alpha0.05		973	3046	0	117.406	969	1023	0	36.114

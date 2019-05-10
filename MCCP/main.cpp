@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 	{
 		Modelo_GRAP_R problema(argv[1]);
 		problema.set_alpha(alpha);
+		problema.Definir_Arcos_SA();
 		problema.montar_modelo();
 		problema.resolver_inteira();
 	}
@@ -48,13 +49,26 @@ int main(int argc, char *argv[])
 	{
 		cerr << "Erro Inteira" << endl;
 	}*/
-	
+
+	try
 	{
+		Modelo_GRAP_R problema(argv[1]);
+		problema.set_alpha(alpha);
+		problema.Definir_Arcos_GRASP();
+		problema.montar_modelo();
+		problema.resolver_inteira();
+	}
+	catch (const std::exception&)
+	{
+		cerr << "Erro Inteira" << endl;
+	}
+	
+	/*{
 		Clustering problema(argv[1]);
 		ofstream arquivo("lower_bounds.txt", fstream::app);
 		cout << argv[1] << "\t" << problema.calcular_lower_bound() << endl;
 		arquivo.close();
-	}
+	}*/
 
 	return 0;
 }

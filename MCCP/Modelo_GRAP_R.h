@@ -39,7 +39,9 @@ public:
 		this->alpha = alpha;
 	}
 
-	void Definir_Arcos();
+	void Definir_Arcos_SA();
+
+	void Definir_Arcos_GRASP();
 
 
 	Modelo_GRAP_R(const char* filename);

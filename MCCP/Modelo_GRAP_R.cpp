@@ -88,20 +88,16 @@ bool Modelo_GRAP_R::maior_que_alpha(int i, int j) {
 		return false;
 }
 
-void Modelo_GRAP_R::Definir_Arcos()
+void Modelo_GRAP_R::Definir_Arcos_SA()
 {
-	double	TEMPERATURA = maior_peso - maior_peso*alpha,
-		taxa_reducao = 1,
-		referencia_d = maior_peso*alpha,
-		DELTA;
-
+	double	TEMPERATURA = (maior_peso - maior_peso*alpha),
+			taxa_reducao = 0.9,
+			referencia_d = maior_peso*alpha,
+			DELTA;
 
 	arcos_aceitos = vector<vector<bool>>(m);
 	for (int i = 0; i < m; i++)
-	{
 		arcos_aceitos[i] = vector<bool>(n);
-	}
-
 
 	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 	default_random_engine generator(seed);
@@ -115,7 +111,6 @@ void Modelo_GRAP_R::Definir_Arcos()
 			DELTA = d[i][j] - referencia_d;
 			if (distribution(generator) < exp(-DELTA / TEMPERATURA)) {
 				arcos_aceitos[i][j] = 1;
-				//TEMPERATURA *= taxa_reducao;
 			}
 			else
 			{
@@ -123,9 +118,31 @@ void Modelo_GRAP_R::Definir_Arcos()
 			}
 		}
 	}
-
-
 }
+
+void Modelo_GRAP_R::Definir_Arcos_GRASP()
+{
+	arcos_aceitos = vector<vector<bool>>(m);
+	for (int i = 0; i < m; i++)
+		arcos_aceitos[i] = vector<bool>(n);
+
+	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+	default_random_engine generator(seed);
+
+	uniform_real_distribution<double> distribution(0.0, 1.0);
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (d[i][j] <= alpha*maior_peso + distribution(generator)*(maior_peso - alpha*maior_peso))
+				arcos_aceitos[i][j] = 1;
+			else
+				arcos_aceitos[i][j] = 0;
+		}
+	}
+}
+
 
 Modelo_GRAP_R::Modelo_GRAP_R(const char* filename) {
 	inst_name = filename;
@@ -155,7 +172,6 @@ Modelo_GRAP_R::Modelo_GRAP_R(const char* filename) {
 }
 
 void Modelo_GRAP_R::montar_modelo() {
-	Definir_Arcos();
 	model = IloModel(env);
 	cplexvar_initiate();
 	fo();
