@@ -1,5 +1,5 @@
 #include "clustering.h"
-
+#include "Modelo_GRAP_R.h"
 int main(int argc, char *argv[])
 {
 	if(argc != 3){
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	resultados << endl << argv[1] << "\t alpha" << alpha << "\t";
 	resultados.close();
 
-	try
+	/*try
 	{
 		Clustering problema(argv[1]);
 		problema.set_alpha(alpha);
@@ -23,11 +23,23 @@ int main(int argc, char *argv[])
 	catch (const std::exception&)
 	{
 		cerr << "Erro Linear" << endl;
-	}
+	}*/
 
-	try
+	//try
+	//{
+	//	Clustering problema(argv[1]);
+	//	problema.set_alpha(alpha);
+	//	problema.montar_modelo();
+	//	problema.resolver_inteira();
+	//}
+	//catch (const std::exception&)
+	//{
+	//	cerr << "Erro Inteira" << endl;
+	//}
+
+	/*try
 	{
-		Clustering problema(argv[1]);
+		Modelo_GRAP_R problema(argv[1]);
 		problema.set_alpha(alpha);
 		problema.montar_modelo();
 		problema.resolver_inteira();
@@ -35,9 +47,14 @@ int main(int argc, char *argv[])
 	catch (const std::exception&)
 	{
 		cerr << "Erro Inteira" << endl;
-	}
-
+	}*/
 	
+	{
+		Clustering problema(argv[1]);
+		ofstream arquivo("lower_bounds.txt", fstream::app);
+		arquivo << argv[1] << "\t" << problema.calcular_lower_bound() << endl;
+		arquivo.close();
+	}
 
 	return 0;
 }

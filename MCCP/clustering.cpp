@@ -11,20 +11,7 @@ void Clustering::alocar_matrizes() {
 	for (int i = 0; i < m; i++)
 		d[i] = new double[n];
 }
-//void Clustering::desalocar_matrizes() {
-//	for (int i = 0; i < n; ++i) {
-//		delete[] c[i];
-//	}
-//	delete[] c;
-//	for (int i = 0; i < m; ++i) {
-//		delete[] q[i];
-//	}
-//	delete[] q;
-//	for (int i = 0; i < m; ++i) {
-//		delete[] d[i];
-//	}
-//	delete[] d;
-//}
+
 
 void Clustering::cplexvar_initiate() {
 	y = IloBoolVarArray(env, n);
@@ -137,6 +124,7 @@ void Clustering::montar_modelo() {
 }
 
 
+
 void Clustering::resolver_inteira() {
 	//cplex.setParam(IloCplex::TiLim, 3600);
 	try {
@@ -189,8 +177,10 @@ void Clustering::resolver_linear() {
 		relax.add(IloConversion(env, y[j], ILOFLOAT));
 	cplex = IloCplex(relax);
 
-	cplex.setParam(IloCplex::TiLim, 3600);
-	cplex.setParam(IloCplex::Param::Emphasis::Numerical, 1);
+	cplex.setParam(IloCplex::TiLim, 600);
+	cplex.setParam(IloCplex::NodeFileInd, 1);
+	//cplex.setParam(IloCplex::TiLim, 3600);
+	//cplex.setParam(IloCplex::Param::Emphasis::Numerical, 1);
 	soltime = cplex.getCplexTime();
 	if (!cplex.solve()) {
 		env.error() << "Otimizacao do LP mal-sucedida." << endl;
@@ -204,3 +194,22 @@ void Clustering::resolver_linear() {
 		"\t" << soltime;
 	resultados.close();
 }
+
+double Clustering::calcular_lower_bound() {
+	double lower_bound = 0.0;
+
+	
+	for (int i = 0; i < m; i++)
+	{
+		double min = 9999999999;
+		for (int j = 0; j < n; j++)
+		{
+			if (d[i][j] < min)
+				min = d[i][j];
+		}
+		lower_bound += min;
+	}
+
+	return lower_bound;
+}
+

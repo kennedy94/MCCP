@@ -1,0 +1,21 @@
+
+MCCP1.datmod	 alpha0.1		1466	1038	0	22.823
+MCCP1.datmod	 alpha0.2		1526	1657	0	11.95	1455	1240	0	31.637
+MCCP1.datmod	 alpha0.3		1455	1209	0	11.965	1455	980	0	23.634
+MCCP1.datmod	 alpha0.3		1455	1209	0	13.105	1455	956	0	21.326
+MCCP1.datmod	 alpha0.2		1526	1657	0	13.619	1455	783	0	17.753
+MCCP1.datmod	 alpha0.1		1466	1034	0	28.08
+MCCP1.datmod	 alpha0.1	
+MCCP1.datmod	 alpha1		 Linear 	1275.78		0.842
+MCCP120.datmod	 alpha1	
+MCCP120.datmod	 alpha1	
+MCCP120.datmod	 alpha1	
+MCCP1.datmod	 alpha1	
+MCCP1.datmod	 alpha1	
+MCCP1.datmod	 alpha1	
+MCCP1.datmod	 alpha1	
+MCCP1.datmod	 alpha1	
+MCCP1.datmod	 alpha1	
+MCCP120.datmod	 alpha1	
+MCCP3.datmod	 alpha1	
+MCCP2.datmod	 alpha1	

@@ -39,4 +39,6 @@ public:
 
 	void resolver_linear();
 
+	double calcular_lower_bound();
+
 };
