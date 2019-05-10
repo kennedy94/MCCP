@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	{
 		Clustering problema(argv[1]);
 		ofstream arquivo("lower_bounds.txt", fstream::app);
-		arquivo << argv[1] << "\t" << problema.calcular_lower_bound() << endl;
+		cout << argv[1] << "\t" << problema.calcular_lower_bound() << endl;
 		arquivo.close();
 	}
 
