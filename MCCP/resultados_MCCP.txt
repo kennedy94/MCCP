@@ -46,3 +46,28 @@ MCCP1.datmod	 alpha0.05
 MCCP1.datmod	 alpha0.05	
 MCCP1.datmod	 alpha0.05		1492	2010	0	35.256	1482	1116	0	16.068
 MCCP2.datmod	 alpha0.05		973	3046	0	117.406	969	1023	0	36.114
+MCCP1.datmod	 alpha0.1		0.10136	Infeasible
+MCCP1.datmod	 alpha0.1		0.10136	Infeasible
+MCCP1.datmod	 alpha0.1		0.10136	2888	788	0	3.026	Optimal
+MCCP1.datmod	 alpha0.05		0.05136	Infeasible
+MCCP1.datmod	 alpha0.1		0.10136	2888	788	0	3.822	Optimal
+MCCP1.datmod	 alpha0.15		0.15248	1762	1034	0	4.93	Optimal
+MCCP1.datmod	 alpha0.2		0.19968	1522	2742	0	13.916	Optimal
+MCCP1.datmod	 alpha0.2		0.19968	1455	865	0	15.225	Optimal
+MCCP1.datmod	 alpha0.1		0.10136	1455	797	0	15.428	Optimal
+MCCP1.datmod	 alpha0.1		0.10136	1467	1796	0	27.019	Optimal
+MCCP1.datmod	 alpha0.1		0.53144	1466	947	0	15.834	Optimal
+MCCP1.datmod	 alpha0.1		0.10136	2888	788	0	2.824	Optimal
+MCCP1.datmod	 alpha0.1		0.15136	2727	1193	0	4.899	Optimal
+MCCP1.datmod	 alpha0.1		0.10136	2888	788	0	2.887	Optimal
+MCCP1.datmod	 alpha0.05		0.10136	Infeasible
+MCCP1.datmod	 alpha0.1		0.15136	2714	1207	0	4.821	Optimal
+MCCP1.datmod	 alpha0.1		0.15136	Infeasible
+MCCP1.datmod	 alpha0.1		0.20136	2484	1100	0	4.602	Optimal
+MCCP1.datmod	 alpha0.1		0.20136	2464	963	0	5.054	Optimal
+MCCP1.datmod	 alpha0.1		0.20136	2464	719	0	5.102	Optimal
+MCCP11.datmod	 alpha0.1		0.199
+MCCP1.datmod	 alpha0.1		0.20136	2472	1035	0	5.335	Optimal
+MCCP1.datmod	 alpha0.1		0.15136	2706	876	0	3.401	Optimal
+MCCP1.datmod	 alpha0.2		0.24968	1503	2258	0	16.068	Optimal
+MCCP1.datmod	 alpha0.2		0.29976	1503	2295	0	19.984	Optimal

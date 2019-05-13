@@ -126,21 +126,96 @@ void Modelo_GRAP_R::Definir_Arcos_GRASP()
 	for (int i = 0; i < m; i++)
 		arcos_aceitos[i] = vector<bool>(n);
 
-	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-	default_random_engine generator(seed);
+	
 
-	uniform_real_distribution<double> distribution(0.0, 1.0);
+	int qtde_arcos = 0;
 
 	for (int i = 0; i < m; i++)
 	{
 		for (int j = 0; j < n; j++)
 		{
-			if (d[i][j] <= alpha*maior_peso + distribution(generator)*(maior_peso - alpha*maior_peso))
+			if (d[i][j] <= alpha*maior_peso){// + distribution(generator)*(maior_peso - alpha*maior_peso)){
 				arcos_aceitos[i][j] = 1;
-			else
+				qtde_arcos++;
+			}
+			else{
 				arcos_aceitos[i][j] = 0;
+			}
 		}
 	}
+	
+	for (int j = 0; j < n; j++)
+	{
+		bool tem_arco = false;
+		int i_min, j_min, menor_arco = INT_MAX;
+		for (int i = 0; i < m; i++)
+		{
+			if (arcos_aceitos[i][j] = 1) {
+				tem_arco = true;
+				break;
+			}
+			if (menor_arco > arcos_aceitos[i][j]) {
+				menor_arco = arcos_aceitos[i][j];
+				i_min = i;
+				j_min = j;
+			}
+
+		}
+		if (!tem_arco) {
+			arcos_aceitos[i_min][j_min] = 1;
+			qtde_arcos++;
+		}
+
+	}
+
+	for (int i = 0; i < m; i++)
+	{
+		bool tem_arco = false;
+		int i_min, j_min, menor_arco = INT_MAX;
+		for (int j = 0; j < n; j++)
+		{
+			if (arcos_aceitos[i][j] = 1) {
+				tem_arco = true;
+				break;
+			}
+			if (menor_arco > arcos_aceitos[i][j]) {
+				menor_arco = arcos_aceitos[i][j];
+				i_min = i;
+				j_min = j;
+			}
+
+		}
+		if (!tem_arco) {
+			arcos_aceitos[i_min][j_min] = 1;
+			qtde_arcos++;
+		}
+
+	}
+
+	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+	default_random_engine generator(seed);
+
+	uniform_real_distribution<double> distribution(0.0, 1.0);
+	int maiores_aceitos = 0;
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (arcos_aceitos[i][j] == 0 &&
+				d[i][j] <= alpha*maior_peso + distribution(generator)*(maior_peso - alpha*maior_peso)
+				&& (double)maiores_aceitos/(m*n) <= alpha/2) {
+				arcos_aceitos[i][j] = 1;
+				qtde_arcos++;
+				maiores_aceitos++;
+			}
+		}
+	}
+
+
+	densidade_arcos = (double)qtde_arcos/(m*n);
+	resultados.open("resultados_MCCP.txt", fstream::app);
+	resultados << "\t" << densidade_arcos;
+	resultados.close();
 }
 
 
@@ -208,7 +283,7 @@ void Modelo_GRAP_R::resolver_inteira() {
 
 	}
 	catch (IloException& e) {
-	
+
 
 		cerr << "Erro: " << e.getMessage() << endl;
 		cout << "\nErro na inteira" << endl;

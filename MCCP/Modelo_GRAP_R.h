@@ -22,6 +22,7 @@ protected:
 	IloEnv env;
 	IloModel model;
 	IloCplex cplex;
+	double densidade_arcos;
 	string inst_name;
 	double maior_peso, menor_peso;
 
