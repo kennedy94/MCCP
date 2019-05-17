@@ -1,5 +1,8 @@
 #include "clustering.h"
 #include "Modelo_GRAP_R.h"
+#include "MH.h"
+
+
 int main(int argc, char *argv[])
 {
 	if(argc != 3){
@@ -50,7 +53,7 @@ int main(int argc, char *argv[])
 		cerr << "Erro Inteira" << endl;
 	}*/
 
-	try
+	/*try
 	{
 		Modelo_GRAP_R problema(argv[1]);
 		problema.set_alpha(alpha);
@@ -61,7 +64,7 @@ int main(int argc, char *argv[])
 	catch (const std::exception&)
 	{
 		cerr << "Erro Inteira" << endl;
-	}
+	}*/
 	
 	/*{
 		Clustering problema(argv[1]);
@@ -69,6 +72,19 @@ int main(int argc, char *argv[])
 		cout << argv[1] << "\t" << problema.calcular_lower_bound() << endl;
 		arquivo.close();
 	}*/
+
+	
+	try {
+		MH problema(argv[1]);
+		problema.testes_unitarios();
+
+	}
+	catch (const std::exception&)
+	{
+		cerr << "Erro Inteira" << endl;
+	}
+
+
 
 	return 0;
 }

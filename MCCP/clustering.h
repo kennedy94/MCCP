@@ -1,7 +1,9 @@
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <ilcplex/ilocplex.h>
 #include <list>
+
 
 using namespace std;
 
@@ -10,7 +12,7 @@ protected:
 	ofstream resultados;
 	IloNum soltime;
 	double alpha;
-	int m, n, p, k, **c, **q;
+	int m, n, p, K, **c, **q;
 	double **d;
 	IloArray<IloBoolVarArray> x;
 	IloBoolVarArray y;

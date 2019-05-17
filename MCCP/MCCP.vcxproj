@@ -155,11 +155,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="clustering.h" />
+    <ClInclude Include="MH.h" />
     <ClInclude Include="Modelo_GRAP_R.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="clustering.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MH.cpp" />
     <ClCompile Include="Modelo_GRAP_R.cpp" />
   </ItemGroup>
   <ItemGroup>

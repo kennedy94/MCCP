@@ -3,10 +3,10 @@
 void Modelo_GRAP_R::alocar_matrizes() {
 	c = new int*[n];
 	for (int i = 0; i < n; i++)
-		c[i] = new int[k];
+		c[i] = new int[K];
 	q = new int*[m];
 	for (int i = 0; i < m; i++)
-		q[i] = new int[k];
+		q[i] = new int[K];
 	d = new double*[m];
 	for (int i = 0; i < m; i++)
 		d[i] = new double[n];
@@ -65,7 +65,7 @@ void Modelo_GRAP_R::restricoes() {
 		expr.clear();
 	}
 	for (j = 0; j < n; j++) {
-		for (w = 0; w < k; w++) {
+		for (w = 0; w < K; w++) {
 			for (i = 0; i < m; i++)
 				if (arcos_aceitos[i][j] == 1)
 					expr += q[i][w] * x[i][j];
@@ -226,14 +226,14 @@ Modelo_GRAP_R::Modelo_GRAP_R(const char* filename) {
 		cerr << "	Instancia nao encontrada" << endl;
 		exit(1);
 	}
-	instancia >> m >> n >> p >> k;
+	instancia >> m >> n >> p >> K;
 	alocar_matrizes();
 
 	for (int i = 0; i < m; i++)
-		for (int j = 0; j < k; j++)
+		for (int j = 0; j < K; j++)
 			instancia >> q[i][j];
 	for (int i = 0; i < n; i++)
-		for (int j = 0; j < k; j++)
+		for (int j = 0; j < K; j++)
 			instancia >> c[i][j];
 	maior_peso = 0;
 	for (int i = 0; i < m; i++)

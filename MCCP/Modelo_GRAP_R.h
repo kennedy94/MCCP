@@ -15,7 +15,7 @@ protected:
 	ofstream resultados;
 	IloNum soltime;
 	double alpha;
-	int m, n, p, k, **c, **q;
+	int m, n, p, K, **c, **q;
 	double **d;
 	IloArray<IloBoolVarArray> x;
 	IloBoolVarArray y;
