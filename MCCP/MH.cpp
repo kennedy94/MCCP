@@ -19,6 +19,37 @@ int MH::f(vector<int> solucao)
 	for (int j = 0; j < n; j++)
 		capacidades_acumuladas[j] = vector<int>(K, 0);
 
+	vector<bool> cliente_alocado(m, false);
+	for (int j = 0; j < p; j++)	{
+		while(true){
+			int cluster = solucao[j];
+			int cliente = -1;
+			int min = INT_MAX;
+			for (int i = 0; i < m; i++) {
+				int tipo = -1;
+				bool ainda_cabe = true;
+				for (int k = 0; k < K; k++)
+					if (capacidades_acumuladas[cluster][k] + q[i][k] > c[cluster][k])
+						ainda_cabe = false;
+
+
+				if (min > d[i][cluster] && ainda_cabe && !cliente_alocado[i]) {
+					min = d[i][cluster];
+					cliente = i;
+				}
+			}
+			if (cliente == -1)
+				break;	
+
+			for (int k = 0; k < K; k++)
+				capacidades_acumuladas[cluster][k] += q[cliente][k];
+			cliente_alocado[cliente] = true;
+			valor_fo += min;
+		}
+
+	}
+	return valor_fo;
+
 	for (int i = 0; i < m; i++) {
 		int min = INT_MAX,
 			cluster = -1;

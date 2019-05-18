@@ -39,7 +39,15 @@ public:
 	};
 
 	void testes_unitarios() {
-		srand(time(NULL));
+		vector<int> Y_zao = {1, 7, 12, 17, 24, 29, 30, 31, 33, 36, 37, 45};
+		reverse(Y_zao.begin(), Y_zao.end());
+
+		cout << f(Y_zao) << endl;
+		
+		getchar();
+
+
+		/*srand(time(NULL));
 		vector<individuo> Populacao = gerar_populacao_inicial(100);
 		sort(Populacao.begin(), Populacao.end());
 		
@@ -65,7 +73,7 @@ public:
 
 		}
 
-		cout << "melhor" <<  Populacao[0].fitness << endl;
+		cout << "melhor" <<  Populacao[0].fitness << endl;*/
 
 	}
 

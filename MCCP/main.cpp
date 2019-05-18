@@ -76,6 +76,9 @@ int main(int argc, char *argv[])
 	
 	try {
 		MH problema(argv[1]);
+		//problema.set_alpha(alpha);
+		//problema.montar_modelo();
+		//problema.resolver_inteira();
 		problema.testes_unitarios();
 
 	}
