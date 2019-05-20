@@ -4,12 +4,15 @@
 #include <numeric>
 #include <list>
 #include <algorithm>
+#include <set>
 
 struct individuo {
-	vector<int> cromossomo;
+	vector<int> centroides;
+	vector<int> clientes_centroides;
 	double fitness;
-	individuo(vector<int> vetor, double valor) {
-		cromossomo = vetor;
+	individuo(vector<int> vetor, vector<int> vetor_c, double valor) {
+		centroides = vetor;
+		clientes_centroides = vetor_c;
 		fitness = valor;
 	}
 	inline bool operator<(individuo a) {
@@ -26,54 +29,36 @@ class MH :
 {
 private:
 
-	int f(vector<int> solucao);
-	bool viavel(vector<bool> DVAR_Y, vector<vector<bool>> DVAR_X);
+	inline void f(individuo &ind);
 
-	void GA_mutacao(vector<int> & solucao);
+	bool viavel(individuo ind);
 
-	vector<int> GA_crossover(vector<int> pai, vector<int> mae);
+	void GA_mutacao(individuo &ind);
 
+	individuo GA_crossover_alternado(individuo pai, individuo mae);
+
+	individuo gerar_solu_viavel();
+
+	void crossover(vector<individuo> Populacao);
 
 public:
 	MH(const char* filename): Clustering(filename) {
 	};
 
 	void testes_unitarios() {
-		vector<int> Y_zao = {1, 7, 12, 17, 24, 29, 30, 31, 33, 36, 37, 45};
-		reverse(Y_zao.begin(), Y_zao.end());
-
-		cout << f(Y_zao) << endl;
-		
-		getchar();
-
-
-		/*srand(time(NULL));
-		vector<individuo> Populacao = gerar_populacao_inicial(100);
+		srand(time(NULL));
+		vector<individuo> Populacao = gerar_populacao_inicial(50);
 		sort(Populacao.begin(), Populacao.end());
 		
-		for (int iter = 0; iter < 10000; iter++){
-			int pai = rand() % Populacao.size(),
-				mae = pai;
-			while (pai == mae)
-				mae = rand() % Populacao.size();
-
-			vector <int> filho_vet = GA_crossover(Populacao[pai].cromossomo,
-				Populacao[mae].cromossomo);
+		for (int iter = 0; iter < 1000; iter++){
+			crossover(Populacao);
 			
-			if (rand() < 0.01)
-				GA_mutacao(filho_vet);
-
-			individuo filho(filho_vet, f(filho_vet));
-
-			if (find(Populacao.begin(), Populacao.end(), filho) == Populacao.end()) {
-				Populacao.push_back(filho);
-				sort(Populacao.begin(), Populacao.end());
-				Populacao = vector<individuo>(Populacao.begin(), Populacao.begin() + 100);
-			}
-
+			cout << Populacao[0].fitness << " viavel? " << viavel(Populacao[0]) << endl;
 		}
 
-		cout << "melhor" <<  Populacao[0].fitness << endl;*/
+		cout << "melhor" <<  Populacao[0].fitness << endl;
+		cout << viavel(Populacao[0]) << endl;
+		cout << endl;
 
 	}
 

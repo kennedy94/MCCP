@@ -3,90 +3,51 @@
 
 
 
-int MH::f(vector<int> solucao)
+inline void MH::f(individuo &ind)
 {
+	ind.fitness = 0;
+	vector<int> centroides = ind.centroides,
+				cent_clientes = ind.clientes_centroides;
 	double valor_fo = 0.0;
-
-	//vector<bool> DVAR_Y(n, false);
-	//vector<vector<bool>> DVAR_X(m);
-	//for (int i = 0; i < m; i++)
-	//	DVAR_X[i] = vector<bool>(n, false);
-
-
 
 	vector<vector<int>> capacidades_acumuladas;
 	capacidades_acumuladas = vector<vector<int>>(n);
 	for (int j = 0; j < n; j++)
 		capacidades_acumuladas[j] = vector<int>(K, 0);
 
-	vector<bool> cliente_alocado(m, false);
-	for (int j = 0; j < p; j++)	{
-		while(true){
-			int cluster = solucao[j];
-			int cliente = -1;
-			int min = INT_MAX;
-			for (int i = 0; i < m; i++) {
-				int tipo = -1;
-				bool ainda_cabe = true;
-				for (int k = 0; k < K; k++)
-					if (capacidades_acumuladas[cluster][k] + q[i][k] > c[cluster][k])
-						ainda_cabe = false;
-
-
-				if (min > d[i][cluster] && ainda_cabe && !cliente_alocado[i]) {
-					min = d[i][cluster];
-					cliente = i;
-				}
-			}
-			if (cliente == -1)
-				break;	
-
-			for (int k = 0; k < K; k++)
-				capacidades_acumuladas[cluster][k] += q[cliente][k];
-			cliente_alocado[cliente] = true;
-			valor_fo += min;
-		}
-
-	}
-	return valor_fo;
-
 	for (int i = 0; i < m; i++) {
-		int min = INT_MAX,
-			cluster = -1;
+		valor_fo += d[i][cent_clientes[i]];
 
-		for (int j = 0; j < p; j++) {
-			double soma = 0;
-			bool ainda_cabe = true;
-			for (int k = 0; k < K; k++) {
-				if (capacidades_acumuladas[solucao[j]][k] + q[i][k] > c[solucao[j]][k])
-					ainda_cabe = false;
-			}
-		
-			if (d[i][solucao[j]] < min && ainda_cabe) {
-				min = d[i][j];
-				cluster = solucao[j];
-			}
-		}
-
-		if (cluster == -1) {
-			cerr << "Inviabilidade" << endl;
-			system("pause");
-			exit(0);
-		}
 		for (int k = 0; k < K; k++)
-			capacidades_acumuladas[cluster][k] += q[i][k];
-
-		//DVAR_X[i][cluster] = true;
-		//DVAR_Y[cluster] = true;
-
-		valor_fo += min;
+			capacidades_acumuladas[cent_clientes[i]][k] += q[i][k];
 	}
-	//cout << viavel(DVAR_Y, DVAR_X) << endl;
-	return valor_fo;
+	
+
+	//penalizar inviabilidade por capacidade
+	for (int j = 0; j < ind.centroides.size(); j++)
+		for (int k = 0; k < K; k++)		
+			valor_fo += 1*max(capacidades_acumuladas[centroides[j]][k] - c[centroides[j]][k], 0);
+
+	//penalizar por numero de clusters
+	valor_fo += 1 * abs((int)ind.centroides.size() - p);
+
+	ind.fitness = valor_fo;
 }
 
-bool MH::viavel(vector<bool> DVAR_Y, vector<vector<bool>> DVAR_X)
+bool MH::viavel(individuo ind)
 {
+	vector<bool> DVAR_Y(n);
+	vector<vector<bool>> DVAR_X(m);
+	for (int i = 0; i < m; i++)
+		DVAR_X[i] = vector<bool>(n);
+
+
+
+	for (int j = 0; j < ind.centroides.size(); j++)
+		DVAR_Y[ind.centroides[j]] = true;
+	for (int i = 0; i < m; i++)
+		DVAR_X[i][ind.clientes_centroides[i]] = true;
+
 
 	int i, j, w;
 	int soma = 0;
@@ -124,7 +85,10 @@ bool MH::viavel(vector<bool> DVAR_Y, vector<vector<bool>> DVAR_X)
 	return true;
 }
 
-void MH::GA_mutacao(vector<int> & solucao){
+void MH::GA_mutacao(individuo & ind){
+
+	vector<int> solucao = ind.centroides;
+
 	vector<int> clusters_fora;
 	for (int j = 0; j < n; j++){
 		if (find(solucao.begin(), solucao.end(), j)
@@ -132,44 +96,26 @@ void MH::GA_mutacao(vector<int> & solucao){
 			clusters_fora.push_back(j);
 	}
 
-	int retirar = rand() % p,
-		colocar = rand() % (n - p);
+	int retirar = rand() % ind.centroides.size(),
+		colocar = rand() % clusters_fora.size();
 
-	solucao[retirar] = clusters_fora[colocar];
-	sort(solucao.begin(), solucao.end());
+
+	for (int i = 0; i < m; i++)
+		if (ind.clientes_centroides[i] == solucao[retirar])
+			ind.clientes_centroides[i] == clusters_fora[colocar];
+
+	ind.centroides[retirar] = clusters_fora[colocar];
 }
 
-vector<int> MH::GA_crossover(vector<int> pai, vector<int> mae) {
-	vector<int> filho,
-				so_no_pai,
-				so_na_mae,
-				nos_dois;
+individuo MH::GA_crossover_alternado(individuo pai, individuo mae) {
+	vector<int> filho_clientes(m);
 
-	for (int j = 0; j < p; j++)	{
-		if (find(mae.begin(), mae.end(), pai[j]) == mae.end())
-			so_no_pai.push_back(pai[j]);
-		else
-			nos_dois.push_back(pai[j]);
-		
-		if (find(pai.begin(), pai.end(), mae[j]) == pai.end())
-			so_na_mae.push_back(mae[j]);
+	for (int i = 0; i < m; i++)
+		filho_clientes[i] = (i % 2 == 0) ? pai.clientes_centroides[i] : mae.clientes_centroides[i];
 
-	}
-
-	filho = vector<int>(nos_dois.begin(), nos_dois.end());
-
-	int contador = 0;
-	for (int j1 = 0; j1 < p - nos_dois.size(); j1++) {
-		if (j1 % 2)
-			filho.push_back(so_no_pai[contador]);
-		else {
-			filho.push_back(so_na_mae[contador]);
-			contador++;
-		}
-	}
-
-	sort(filho.begin(), filho.end());
-	return filho;
+	set<int> filho_cent(filho_clientes.begin(), filho_clientes.end());
+	
+	return individuo(vector<int>(filho_cent.begin(), filho_cent.end()), filho_clientes, NULL);
 }
 
 
@@ -177,22 +123,81 @@ vector<individuo> MH::gerar_populacao_inicial(int popu_size)
 {
 	vector<individuo> Popu;
 
-	vector<int> myvector;
-	for (int j = 0; j < n; j++) myvector.push_back(j);
-	
+	for (int j = 0; j < popu_size; j++) {
 
-	for (int i = 0; i < m*n; i++){
-		random_shuffle(myvector.begin(), myvector.end());
-		vector<int> subset(myvector.begin(), myvector.begin() + p);
-		sort(subset.begin(), subset.end());
-
-		Popu.push_back(individuo(subset, f(subset)));
+		individuo ind = gerar_solu_viavel();
+		f(ind);
+		Popu.push_back(ind);
 	}
-	sort(Popu.begin(), Popu.end());
-	Popu = vector<individuo>(Popu.begin(), Popu.begin() + popu_size);
-	
+
 	return Popu;
 }
+
+individuo MH::gerar_solu_viavel(){
+
+	vector<vector<int>> capacidades_acumuladas;
+	capacidades_acumuladas = vector<vector<int>>(n);
+	for (int j = 0; j < n; j++)
+		capacidades_acumuladas[j] = vector<int>(K, 0);
+
+	vector<bool> cliente_alocado(m, false);
+
+	vector<int> myvector;
+	for (int j = 0; j < n; j++) myvector.push_back(j);
+
+	random_shuffle(myvector.begin(), myvector.end());
+	vector<int> subset(myvector.begin(), myvector.begin() + p);
+
+	vector<int> clientes(m);
+
+	for (int i = 0; i < m; i++) {
+		int min = INT_MAX,
+			cluster = -1;
+
+		for (int j = 0; j < p; j++) {
+			double soma = 0;
+			bool ainda_cabe = true;
+			for (int k = 0; k < K; k++) {
+				if (capacidades_acumuladas[subset[j]][k] + q[i][k] > c[subset[j]][k])
+					ainda_cabe = false;
+			}
+
+			if (d[i][subset[j]] < min && ainda_cabe) {
+				min = d[i][j];
+				cluster = subset[j];
+			}
+		}
+
+		for (int k = 0; k < K; k++)
+			capacidades_acumuladas[cluster][k] += q[i][k];
+
+		clientes[i] = cluster;
+	}
+
+	return individuo(subset, clientes, NULL);
+}
+
+void MH::crossover(vector<individuo> Populacao){
+	int tam_popu = Populacao.size();
+	for (int i = 0; i < tam_popu; i++){
+		for (int j = 0; j < tam_popu; j++) {
+			if ((double)rand() / RAND_MAX < 0.3 && i != j) {
+				individuo  filho = GA_crossover_alternado(Populacao[i], Populacao[j]);
+				if ((double)rand() / RAND_MAX < 0.05)
+					GA_mutacao(filho);
+
+				f(filho);
+				Populacao.push_back(filho);
+			}
+		}
+
+	}
+
+	sort(Populacao.begin(), Populacao.end());
+	Populacao = vector<individuo>(Populacao.begin(), Populacao.begin() + p);
+}
+
+
 
 MH::~MH()
 {
