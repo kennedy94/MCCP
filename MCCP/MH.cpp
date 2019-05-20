@@ -86,7 +86,6 @@ bool MH::viavel(individuo ind)
 }
 
 void MH::GA_mutacao(individuo & ind){
-
 	vector<int> solucao = ind.centroides;
 
 	vector<int> clusters_fora;
@@ -107,16 +106,99 @@ void MH::GA_mutacao(individuo & ind){
 	ind.centroides[retirar] = clusters_fora[colocar];
 }
 
+void MH::GA_mutacao_forte(individuo & ind) {
+	vector<int> solucao = ind.centroides;
+
+	set<int> clusters_fora;
+	for (int j = 0; j < n; j++) {
+		if (find(solucao.begin(), solucao.end(), j)
+			== solucao.end())
+			clusters_fora.insert(j);
+	}
+
+	int retirar = rand() % ind.centroides.size(),
+		colocar = rand() % clusters_fora.size();
+
+	vector<int> inserir;
+	while (inserir.size() < solucao.size()){
+		int colocar = rand() % clusters_fora.size();
+		auto it = clusters_fora.begin();
+		advance(it, colocar);
+		inserir.push_back(*it);
+		clusters_fora.erase(it);
+	}
+	
+	for (int i = 0; i < m; i++){
+		for (int j = 0; j < solucao.size(); j++){
+			if (ind.clientes_centroides[i] == ind.centroides[j])
+				ind.clientes_centroides[i] = inserir[j];
+		}
+	}
+}
+
 individuo MH::GA_crossover_alternado(individuo pai, individuo mae) {
 	vector<int> filho_clientes(m);
 
 	for (int i = 0; i < m; i++)
-		filho_clientes[i] = (i < m/2) ? pai.clientes_centroides[i] : mae.clientes_centroides[i];
+		filho_clientes[i] = (i % 2 == 0) ? pai.clientes_centroides[i] : mae.clientes_centroides[i];
 
 	set<int> filho_cent(filho_clientes.begin(), filho_clientes.end());
 	
 	return individuo(vector<int>(filho_cent.begin(), filho_cent.end()), filho_clientes, NULL);
 }
+
+
+void MH::ILS()
+{
+	individuo inicial = gerar_solu_viavel(),
+			aux;
+	aux = inicial;
+	int melhor = INT_MAX;
+
+
+	for (int i = 0; i < 5000; i++){
+		aux = vizinhanca_swap(aux);
+
+		if (melhor > inicial.fitness) {
+			melhor = aux.fitness;
+			inicial = aux;
+		}
+		GA_mutacao_forte(aux);
+		cout << inicial.fitness << endl;
+	}
+	cout << endl;
+
+}
+
+individuo MH::swap(individuo ind, int i1, int i2){
+
+	int aux = ind.clientes_centroides[i1];
+	
+	ind.clientes_centroides[i1] = ind.clientes_centroides[i2];
+	ind.clientes_centroides[i2] = ind.clientes_centroides[i1];
+
+	return ind;
+}
+
+individuo MH::vizinhanca_swap(individuo ind){
+
+	individuo melhor;
+	melhor.fitness = INT_MAX;
+
+	for (int i1 = 0; i1 < m; i1++){
+		for (int i2 = 0; i2 < m; i2++){
+			individuo aux = swap(ind, i1, i2);
+			f(aux);
+			if (melhor.fitness > aux.fitness) {
+				melhor = aux;
+			}
+		}
+	}
+
+	return melhor;
+}
+
+
 
 
 vector<individuo> MH::gerar_populacao_inicial(int popu_size)

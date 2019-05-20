@@ -15,6 +15,11 @@ struct individuo {
 		clientes_centroides = vetor_c;
 		fitness = valor;
 	}
+	individuo() {
+		centroides = vector<int>();
+		clientes_centroides = vector<int>();
+		fitness = NULL;
+	}
 	inline bool operator<(individuo a) {
 		return (fitness < a.fitness);
 	}
@@ -34,6 +39,8 @@ private:
 	bool viavel(individuo ind);
 
 	void GA_mutacao(individuo &ind);
+
+	void GA_mutacao_forte(individuo & ind);
 
 	individuo GA_crossover_alternado(individuo pai, individuo mae);
 
@@ -70,8 +77,8 @@ public:
 
 	void ILS();
 
-
-	
+	individuo swap(individuo ind, int i1, int i2);
+	individuo vizinhanca_swap(individuo ind);
 
 	vector<individuo> gerar_populacao_inicial(int popu_size);
 

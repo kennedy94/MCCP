@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 		//problema.set_alpha(alpha);
 		//problema.montar_modelo();
 		//problema.resolver_inteira();
-		problema.testes_unitarios();
+		problema.ILS();
 
 	}
 	catch (const std::exception&)
