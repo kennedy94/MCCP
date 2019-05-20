@@ -111,7 +111,7 @@ individuo MH::GA_crossover_alternado(individuo pai, individuo mae) {
 	vector<int> filho_clientes(m);
 
 	for (int i = 0; i < m; i++)
-		filho_clientes[i] = (i % 2 == 0) ? pai.clientes_centroides[i] : mae.clientes_centroides[i];
+		filho_clientes[i] = (i < m/2) ? pai.clientes_centroides[i] : mae.clientes_centroides[i];
 
 	set<int> filho_cent(filho_clientes.begin(), filho_clientes.end());
 	
@@ -194,7 +194,7 @@ void MH::crossover(vector<individuo> Populacao){
 	}
 
 	sort(Populacao.begin(), Populacao.end());
-	Populacao = vector<individuo>(Populacao.begin(), Populacao.begin() + p);
+	Populacao = vector<individuo>(Populacao.begin(), Populacao.begin() + tam_popu);
 }
 
 

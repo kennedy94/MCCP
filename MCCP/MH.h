@@ -49,6 +49,10 @@ public:
 		srand(time(NULL));
 		vector<individuo> Populacao = gerar_populacao_inicial(50);
 		sort(Populacao.begin(), Populacao.end());
+
+		cout << "melhor" << Populacao[0].fitness << endl;
+		cout << viavel(Populacao[0]) << endl;
+		cout << endl;
 		
 		for (int iter = 0; iter < 1000; iter++){
 			crossover(Populacao);
@@ -63,6 +67,9 @@ public:
 	}
 
 	void cuckoo_search();
+
+	void ILS();
+
 
 	
 
