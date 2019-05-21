@@ -101,7 +101,7 @@ void MH::GA_mutacao(individuo & ind){
 
 	for (int i = 0; i < m; i++)
 		if (ind.clientes_centroides[i] == solucao[retirar])
-			ind.clientes_centroides[i] == clusters_fora[colocar];
+			ind.clientes_centroides[i] = clusters_fora[colocar];
 
 	ind.centroides[retirar] = clusters_fora[colocar];
 }
@@ -150,21 +150,22 @@ individuo MH::GA_crossover_alternado(individuo pai, individuo mae) {
 
 void MH::ILS()
 {
-	individuo inicial = gerar_solu_viavel(),
-			aux;
-	aux = inicial;
-	int melhor = INT_MAX;
+	individuo	aux = gerar_solu_viavel(); f(aux);
+	individuo melhor = aux;
 
+	srand(time(NULL));
 
-	for (int i = 0; i < 5000; i++){
+	cout << aux.fitness << endl;
+
+	for (int i = 0; i < 100; i++){
 		aux = vizinhanca_swap(aux);
 
-		if (melhor > inicial.fitness) {
-			melhor = aux.fitness;
-			inicial = aux;
-		}
-		GA_mutacao_forte(aux);
-		cout << inicial.fitness << endl;
+		if (melhor.fitness > aux.fitness)
+			melhor = aux;
+
+		GA_mutacao(aux);
+
+		cout << melhor.fitness << endl;
 	}
 	cout << endl;
 
@@ -180,17 +181,41 @@ individuo MH::swap(individuo ind, int i1, int i2){
 	return ind;
 }
 
+individuo MH::opt2(individuo ind, int i1, int i2) {
+
+	vector<int> newsolution = ind.clientes_centroides, 
+		solution = ind.clientes_centroides;
+
+	for (int c = 0; c <= i1 - 1; c++)
+		newsolution[c] = solution[c];
+	int d = 0;
+	for (int c = i1; c <= i2; c++) {
+		newsolution[c] = solution[i2 - d];
+		d++;
+	}
+
+	for (int c = i2 + 1; c < newsolution.size(); c++)
+		newsolution[c] = solution[c];
+	
+
+	return individuo(ind.centroides, newsolution, NULL);
+}
+
+
 individuo MH::vizinhanca_swap(individuo ind){
 
-	individuo melhor;
-	melhor.fitness = INT_MAX;
+	
+	f(ind);
+	individuo melhor = ind;
 
 	for (int i1 = 0; i1 < m; i1++){
 		for (int i2 = 0; i2 < m; i2++){
-			individuo aux = swap(ind, i1, i2);
-			f(aux);
-			if (melhor.fitness > aux.fitness) {
-				melhor = aux;
+			if (i1 != i2) {
+				individuo aux = opt2(ind, i1, i2);
+				f(aux);
+				if (melhor.fitness > aux.fitness) {
+					melhor = aux;
+				}
 			}
 		}
 	}

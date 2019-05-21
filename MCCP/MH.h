@@ -79,9 +79,10 @@ public:
 
 	individuo swap(individuo ind, int i1, int i2);
 	individuo vizinhanca_swap(individuo ind);
-
+	individuo opt2(individuo ind, int i1, int i2);
 	vector<individuo> gerar_populacao_inicial(int popu_size);
 
 	~MH();
 };
+
 
