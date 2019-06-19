@@ -28,17 +28,17 @@ int main(int argc, char *argv[])
 		cerr << "Erro Linear" << endl;
 	}*/
 
-	//try
-	//{
-	//	Clustering problema(argv[1]);
-	//	problema.set_alpha(alpha);
-	//	problema.montar_modelo();
-	//	problema.resolver_inteira();
-	//}
-	//catch (const std::exception&)
-	//{
-	//	cerr << "Erro Inteira" << endl;
-	//}
+	/*try
+	{
+		Clustering problema(argv[1]);
+		problema.set_alpha(alpha);
+		problema.montar_modelo();
+		problema.resolver_inteira();
+	}
+	catch (const std::exception&)
+	{
+		cerr << "Erro Inteira" << endl;
+	}*/
 
 	/*try
 	{
@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
 		//problema.set_alpha(alpha);
 		//problema.montar_modelo();
 		//problema.resolver_inteira();
-		problema.ILS();
-
+		//problema.ILS();
+		problema.HEURISTICA_GULOSA();
 	}
 	catch (const std::exception&)
 	{

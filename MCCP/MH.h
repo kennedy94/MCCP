@@ -29,6 +29,18 @@ struct individuo {
 	}
 };
 
+struct arco {
+	int i, j, custo;
+	arco(int i, int j, int custo) {
+		this->i = i;
+		this->j = j;
+		this->custo = custo;
+	}
+	inline bool operator<(arco a) {
+		return (this->custo < a.custo);
+	}
+};
+
 class MH :
 	public Clustering
 {
@@ -46,13 +58,13 @@ private:
 
 	individuo gerar_solu_viavel();
 
-	void crossover(vector<individuo> Populacao);
+	void crossover(vector<individuo> &Populacao);
 
 public:
 	MH(const char* filename): Clustering(filename) {
 	};
 
-	void testes_unitarios() {
+	void GA() {
 		srand(time(NULL));
 		vector<individuo> Populacao = gerar_populacao_inicial(50);
 		sort(Populacao.begin(), Populacao.end());
@@ -62,6 +74,7 @@ public:
 		cout << endl;
 		
 		for (int iter = 0; iter < 1000; iter++){
+			srand(time(NULL));
 			crossover(Populacao);
 			
 			cout << Populacao[0].fitness << " viavel? " << viavel(Populacao[0]) << endl;
@@ -72,6 +85,9 @@ public:
 		cout << endl;
 
 	}
+
+
+	void HEURISTICA_GULOSA();
 
 	void cuckoo_search();
 

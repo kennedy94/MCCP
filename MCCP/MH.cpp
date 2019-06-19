@@ -26,10 +26,10 @@ inline void MH::f(individuo &ind)
 	//penalizar inviabilidade por capacidade
 	for (int j = 0; j < ind.centroides.size(); j++)
 		for (int k = 0; k < K; k++)		
-			valor_fo += 1*max(capacidades_acumuladas[centroides[j]][k] - c[centroides[j]][k], 0);
+			valor_fo += 100*max(capacidades_acumuladas[centroides[j]][k] - c[centroides[j]][k], 0);
 
 	//penalizar por numero de clusters
-	valor_fo += 1 * abs((int)ind.centroides.size() - p);
+	valor_fo += 100 * abs((int)ind.centroides.size() - p);
 
 	ind.fitness = valor_fo;
 }
@@ -137,33 +137,110 @@ void MH::GA_mutacao_forte(individuo & ind) {
 }
 
 individuo MH::GA_crossover_alternado(individuo pai, individuo mae) {
+
 	vector<int> filho_clientes(m);
-
-	for (int i = 0; i < m; i++)
-		filho_clientes[i] = (i % 2 == 0) ? pai.clientes_centroides[i] : mae.clientes_centroides[i];
-
-	set<int> filho_cent(filho_clientes.begin(), filho_clientes.end());
 	
+	for (int i = 0; i < m; i++) {
+		filho_clientes[i] = ((double)rand()/RAND_MAX < 0.5) ? pai.clientes_centroides[i] : mae.clientes_centroides[i];
+	}
+	
+	set<int> filho_cent (filho_clientes.begin(), filho_clientes.end());
 	return individuo(vector<int>(filho_cent.begin(), filho_cent.end()), filho_clientes, NULL);
 }
 
 
+void MH::HEURISTICA_GULOSA() {
+
+	vector<arco> ARCOS;
+
+	//Ordenar arcos ordem crescente
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
+			ARCOS.push_back(arco(i, j, d[i][j]));
+
+	sort(ARCOS.begin(), ARCOS.end());
+	//reverse(ARCOS.begin(), ARCOS.end());
+
+	//pegar os p menores arcos e associar cluster como centroide
+	int iterar = 0, it_a = 0;
+	vector<int> centroides;
+	while (iterar < p) {
+		if (find(centroides.begin(), centroides.end(), ARCOS[it_a].j) == centroides.end()) {
+			centroides.push_back(ARCOS[it_a].j);
+			iterar++;
+		}
+		it_a++;
+	}
+
+	vector< vector <int> > capacidades_acumuladas(n);
+	for (int j = 0; j < n; j++)
+		capacidades_acumuladas[j] = vector<int>(K, 0);
+
+	vector<arco> SOLUCAO;
+
+	int contador = 0, j = 0;
+	set<int> clientes_disponiveis;
+	for (int i = 0; i < m; i++)
+		clientes_disponiveis.insert(i);
+
+	int soma_fo = 0;
+	while (contador < m) {
+		if (j == p)
+			j = 0;
+
+
+		int min = INT_MAX, min_i = -1;
+		for (auto i: clientes_disponiveis){
+			bool cabe = true;
+			for (int k = 0; k < K; k++) {
+				if (capacidades_acumuladas[centroides[j]][k] + q[i][k] > c[centroides[j]][k]) {
+					cabe = false;
+					break;
+				}
+			}
+			
+			if (d[i][centroides[j]] < min && cabe) {
+				min = d[i][centroides[j]];
+				min_i = i;
+			}
+		}
+		if (min_i != -1) {
+			soma_fo += d[min_i][centroides[j]];
+			SOLUCAO.push_back((arco(min_i, centroides[j], d[min_i][centroides[j]])));
+			clientes_disponiveis.erase(min_i);
+
+			for (int k = 0; k < K; k++)
+				capacidades_acumuladas[centroides[j]][k] += q[min_i][k];
+
+			contador++;
+			
+		}
+		j++;
+	}
+
+	cout << soma_fo << endl;
+	cout << endl;
+}
+
 void MH::ILS()
 {
+	srand(time(NULL));
 	individuo	aux = gerar_solu_viavel(); f(aux);
 	individuo melhor = aux;
 
-	srand(time(NULL));
-
 	cout << aux.fitness << endl;
 
-	for (int i = 0; i < 100; i++){
+	for (int i = 0; i < 1000; i++){
+		srand(time(NULL));
 		aux = vizinhanca_swap(aux);
 
 		if (melhor.fitness > aux.fitness)
 			melhor = aux;
 
-		GA_mutacao(aux);
+		if (i % 2 == 0)
+			GA_mutacao_forte(aux);
+		else
+			GA_mutacao(aux);
 
 		cout << melhor.fitness << endl;
 	}
@@ -211,7 +288,7 @@ individuo MH::vizinhanca_swap(individuo ind){
 	for (int i1 = 0; i1 < m; i1++){
 		for (int i2 = 0; i2 < m; i2++){
 			if (i1 != i2) {
-				individuo aux = opt2(ind, i1, i2);
+				individuo aux = swap(ind, i1, i2);
 				f(aux);
 				if (melhor.fitness > aux.fitness) {
 					melhor = aux;
@@ -284,11 +361,11 @@ individuo MH::gerar_solu_viavel(){
 	return individuo(subset, clientes, NULL);
 }
 
-void MH::crossover(vector<individuo> Populacao){
+void MH::crossover(vector<individuo> &Populacao){
 	int tam_popu = Populacao.size();
 	for (int i = 0; i < tam_popu; i++){
 		for (int j = 0; j < tam_popu; j++) {
-			if ((double)rand() / RAND_MAX < 0.3 && i != j) {
+			if ((double)rand() / RAND_MAX < 0.1 && i != j) {
 				individuo  filho = GA_crossover_alternado(Populacao[i], Populacao[j]);
 				if ((double)rand() / RAND_MAX < 0.05)
 					GA_mutacao(filho);
