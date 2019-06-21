@@ -3,6 +3,7 @@
 #include <fstream>
 #include <ilcplex/ilocplex.h>
 #include <list>
+#include <vector>
 
 
 using namespace std;
@@ -19,8 +20,10 @@ protected:
 	IloEnv env;
 	IloModel model;
 	IloCplex cplex;
+	IloExpr OBJETIVO;
 	string inst_name;
 	double maior_peso;
+	vector< vector<int>> ESTA_NO_MODELO;
 
 	void alocar_matrizes();
 	//void desalocar_matrizes();
@@ -30,12 +33,7 @@ protected:
 
 	bool maior_que_alpha(int i, int j);
 public:
-	void set_alpha(double alpha) {
-		this->alpha = alpha;
-	}
-
-
-	Clustering(const char* filename);
+	Clustering(const char* filename, double alpha);
 	void montar_modelo();
 	void resolver_inteira();
 

@@ -32,16 +32,21 @@ void Clustering::cplexvar_initiate() {
 			x[i][j].setName(strnum);
 		}
 	}
+
+
+
 }
 void Clustering::fo() {
 	IloInt i, j;
-	IloExpr costSum(env);
+	OBJETIVO = IloExpr(env);
+
+
 	for (i = 0; i < m; i++)
 		for (j = 0; j < n; j++)
-			if(!maior_que_alpha(i,j))
-				costSum += d[i][j] * x[i][j];
-	model.add(IloMinimize(env, costSum)).setName("FO");
-	costSum.end();
+			if(ESTA_NO_MODELO[i][j])
+				OBJETIVO += d[i][j] * x[i][j];
+	model.add(IloMinimize(env, OBJETIVO)).setName("FO");
+
 }
 void Clustering::restricoes() {
 	IloInt i, j, w;
@@ -52,14 +57,14 @@ void Clustering::restricoes() {
 	expr.clear();
 	for (j = 0; j < n; j++) {
 		for (i = 0; i < m; i++)
-			if (!maior_que_alpha(i, j))
+			if (ESTA_NO_MODELO[i][j])
 				expr += x[i][j];
 		model.add(expr >= y[j]);
 		expr.clear();
 	}
 	for (i = 0; i < m; i++) {
 		for (j = 0; j < n; j++)
-			if (!maior_que_alpha(i, j))
+			if (ESTA_NO_MODELO[i][j])
 				expr += x[i][j];
 		model.add(expr == 1);
 		expr.clear();
@@ -67,7 +72,7 @@ void Clustering::restricoes() {
 	for (j = 0; j < n; j++) {
 		for (w = 0; w < K; w++) {
 			for (i = 0; i < m; i++)
-				if (!maior_que_alpha(i, j))
+				if (ESTA_NO_MODELO[i][j])
 					expr += q[i][w] * x[i][j];
 			model.add(expr <= c[j][w]);
 			expr.clear();
@@ -76,7 +81,7 @@ void Clustering::restricoes() {
 	expr.end();
 	for (i = 0; i < m; i++)
 		for (j = 0; j < n; j++)
-			if (!maior_que_alpha(i, j))
+			if (ESTA_NO_MODELO[i][j])
 				model.add(x[i][j] - y[j] <= 0);
 
 }
@@ -88,7 +93,9 @@ bool Clustering::maior_que_alpha(int i, int j) {
 		return false;
 }
 
-Clustering::Clustering(const char* filename) {
+Clustering::Clustering(const char* filename, double alpha) {
+	this->alpha = alpha;
+
 	inst_name = filename;
 	ifstream instancia(inst_name, ifstream::in);
 	if (instancia.fail()) {
@@ -113,6 +120,18 @@ Clustering::Clustering(const char* filename) {
 		}
 
 	instancia.close();
+
+	ESTA_NO_MODELO = vector<vector<int>>(m);
+	for (int i = 0; i < m; i++)
+		ESTA_NO_MODELO[i] = vector<int>(n, false);
+
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			if (!maior_que_alpha(i, j))
+				ESTA_NO_MODELO[i][j] = true;
+		}
+	}
+
 }
 
 void Clustering::montar_modelo() {
@@ -138,11 +157,12 @@ void Clustering::resolver_inteira() {
 
 		soltime = cplex.getCplexTime();
 		if (!cplex.solve()) {
+			cout << cplex.getStatus() << endl;
 			env.error() << "Otimizacao do LP mal-sucedida." << endl;
 			return;
 		}
 		soltime = cplex.getCplexTime() - soltime;
-
+		
 		resultados.open("resultados_MCCP.txt", fstream::app);
 		resultados << "\t" << cplex.getObjValue() << "\t" << cplex.getNnodes() << "\t" << cplex.getMIPRelativeGap() <<
 			"\t" << soltime;

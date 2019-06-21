@@ -74,19 +74,30 @@ int main(int argc, char *argv[])
 	}*/
 
 	
+
+	//gulosa + modelo
+	for (double i = 0.25; i <= 0.75; i += 0.25)
+	{
+		try {
+			MH problema(argv[1], alpha);
+			problema.Gamma = i;
+			problema.MATHEURISTICA_HIBRIDA();
+		}
+		catch (const std::exception&)
+		{
+			cerr << "Erro Inteira" << endl;
+		}
+	}
+
 	try {
-		MH problema(argv[1]);
-		//problema.set_alpha(alpha);
-		//problema.montar_modelo();
-		//problema.resolver_inteira();
-		//problema.ILS();
-		problema.HEURISTICA_GULOSA();
+		MH problema(argv[1], alpha);
+		problema.Gamma = 0.9;
+		problema.MATHEURISTICA_HIBRIDA();
 	}
 	catch (const std::exception&)
 	{
 		cerr << "Erro Inteira" << endl;
 	}
-
 
 
 	return 0;

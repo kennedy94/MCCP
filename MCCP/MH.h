@@ -54,49 +54,23 @@ private:
 
 	void GA_mutacao_forte(individuo & ind);
 
-	individuo GA_crossover_alternado(individuo pai, individuo mae);
+	individuo swap(individuo ind, int i1, int i2);
 
-	individuo gerar_solu_viavel();
+	individuo vizinhanca_swap(individuo ind);
 
-	void crossover(vector<individuo> &Populacao);
+	individuo opt2(individuo ind, int i1, int i2);
 
 public:
-	MH(const char* filename): Clustering(filename) {
+
+	double Gamma;
+
+	MH(const char* filename, double alpha) :
+		Clustering(filename, alpha) {
 	};
 
-	void GA() {
-		srand(time(NULL));
-		vector<individuo> Populacao = gerar_populacao_inicial(50);
-		sort(Populacao.begin(), Populacao.end());
+	individuo HEURISTICA_GULOSA();
 
-		cout << "melhor" << Populacao[0].fitness << endl;
-		cout << viavel(Populacao[0]) << endl;
-		cout << endl;
-		
-		for (int iter = 0; iter < 1000; iter++){
-			srand(time(NULL));
-			crossover(Populacao);
-			
-			cout << Populacao[0].fitness << " viavel? " << viavel(Populacao[0]) << endl;
-		}
-
-		cout << "melhor" <<  Populacao[0].fitness << endl;
-		cout << viavel(Populacao[0]) << endl;
-		cout << endl;
-
-	}
-
-
-	void HEURISTICA_GULOSA();
-
-	void cuckoo_search();
-
-	void ILS();
-
-	individuo swap(individuo ind, int i1, int i2);
-	individuo vizinhanca_swap(individuo ind);
-	individuo opt2(individuo ind, int i1, int i2);
-	vector<individuo> gerar_populacao_inicial(int popu_size);
+	void MATHEURISTICA_HIBRIDA();
 
 	~MH();
 };

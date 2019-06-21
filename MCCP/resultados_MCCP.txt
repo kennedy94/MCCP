@@ -1,54 +1,8 @@
-teste.datmod	 alpha1		411	0	0	0.032
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1		189	0	0	0.078
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1		189	0	0	0.312
-MCCP1.datmod	 alpha1		1455	971	0	39.078
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
-teste.datmod	 alpha1	
-teste.datmod	 alpha1	
-MCCP1.datmod	 alpha1	
+MCCP1.datmod	 alpha1		1654	0	0	1.857	1981	0	0	0.078	1987	0	0	0.094	1993	0	0	0.078	2046	0	0	0.078
+MCCP1.datmod	 alpha0.1		2164	0	0	0.218	2175	0	0	0.047	2181	0	0	0.031	2187	0	0	0.032	2228	0	0	0.046
+MCCP1.datmod	 alpha0.1		2164	0	0	0.249	2164	0	0	0.062	2178	0	0	0.031	2183	0	0	0.047	2214	0	0	0.031	2228	0	0	0.032
+MCCP1.datmod	 alpha0.1		2106	0	0	0.203	2106	0	0	0.031	2120	0	0	0.046	2125	0	0	0.031	2156	0	0	0.031	2170	0	0	0.031
+MCCP1.datmod	 alpha0.1		2164	0	0	0.281	2164	0	0	0.047	2178	0	0	0.046	2183	0	0	0.031	2214	0	0	0.031	2228	0	0	0.031
+MCCP1.datmod	 alpha0.1	
+MCCP1.datmod	 alpha1		1981	0	0	0.094	1988	0	0	0.141	2013	0	0	0.078	2062	0	0	0.062
+MCCP31.datmod	 alpha1		3142	0	0	15.335	3151	0	0	8.876	3161	0	0	3.666	3183	0	0	2.403
