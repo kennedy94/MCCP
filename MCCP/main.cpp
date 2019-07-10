@@ -5,16 +5,17 @@
 
 int main(int argc, char *argv[])
 {
-	if(argc != 3){
+	if(argc != 4){
 		cerr << "	Erro de entrada!!" << endl;
 		exit(0);
 	}
 	double alpha = atof(argv[2]);
+	double gamma = atof(argv[3]);
 	//double alpha = 1;
 
-	ofstream resultados("resultados_MCCP.txt", fstream::app);
+	/*ofstream resultados("resultados_MCCP.txt", fstream::app);
 	resultados << endl << argv[1] << "\t alpha" << alpha << "\t";
-	resultados.close();
+	resultados.close();*/
 
 	/*try
 	{
@@ -75,23 +76,14 @@ int main(int argc, char *argv[])
 
 	
 
-	//gulosa + modelo
-	for (double i = 0.25; i <= 0.75; i += 0.25)
-	{
-		try {
-			MH problema(argv[1], alpha);
-			problema.Gamma = i;
-			problema.MATHEURISTICA_HIBRIDA();
-		}
-		catch (const std::exception&)
-		{
-			cerr << "Erro Inteira" << endl;
-		}
-	}
+
+	ofstream resultados("resultados_MCCP.txt", fstream::app);
+	resultados << endl << argv[1] << "\t alpha" << alpha << " '" << gamma << "'\t";
+	resultados.close();
 
 	try {
 		MH problema(argv[1], alpha);
-		problema.Gamma = 0.9;
+		problema.Gamma = gamma;
 		problema.MATHEURISTICA_HIBRIDA();
 	}
 	catch (const std::exception&)

@@ -1,15 +1,15 @@
 #include "clustering.h"
 
 void Clustering::alocar_matrizes() {
-	c = new int*[n];
+	c = vector<vector<int>>(n);
 	for (int i = 0; i < n; i++)
-		c[i] = new int[K];
-	q = new int*[m];
+		c[i] = vector<int>(K);
+	q = vector<vector<int>>(m);
 	for (int i = 0; i < m; i++)
-		q[i] = new int[K];
-	d = new double*[m];
+		q[i] = vector<int>(K);
+	d = vector<vector<double>>(m);
 	for (int i = 0; i < m; i++)
-		d[i] = new double[n];
+		d[i] = vector<double>(n);
 }
 
 
