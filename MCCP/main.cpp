@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 	
 
 
-	ofstream resultados("resultados_MCCP.txt", fstream::app);
+	/*ofstream resultados("resultados_MCCP.txt", fstream::app);
 	resultados << endl << argv[1] << "\t alpha" << alpha << " '" << gamma << "'\t";
 	resultados.close();
 
@@ -89,7 +89,22 @@ int main(int argc, char *argv[])
 	catch (const std::exception&)
 	{
 		cerr << "Erro Inteira" << endl;
+	}*/
+
+	ofstream resultados("resultados_Heuristica.txt", fstream::app);
+	resultados << endl << argv[1] << "\t alpha" << alpha << " '" << gamma << "'\t";
+	
+	try {
+		MH problema(argv[1], alpha);
+		problema.Gamma = gamma;
+		resultados << problema.HEURISTICA_GULOSA().fitness;
 	}
+	catch (const std::exception&)
+	{
+		cerr << "Erro Inteira" << endl;
+	}
+
+	resultados.close();
 
 
 	return 0;
